@@ -36,6 +36,7 @@ function KinesisWritable(client, streamName, options) {
     this.logger = options.logger || null;
     this.highWaterMark = options.highWaterMark || 16;
     this.maxRetries = options.maxRetries || 3;
+    this.delimiter = options.delimiter || '';
 
     // The maximum number of items that can be written to Kinesis in
     // one request is 500
@@ -67,7 +68,7 @@ KinesisWritable.prototype.getPartitionKey = function getPartitionKey(record) {
  */
 KinesisWritable.prototype.transformRecord = function transformRecord(record) {
     return {
-        Data: JSON.stringify(record),
+        Data: JSON.stringify(record) + this.delimiter,
         PartitionKey: this.getPartitionKey()
     };
 };
